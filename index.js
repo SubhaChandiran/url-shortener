@@ -7,7 +7,7 @@ const { UrlModel } = require("./models/urlshort");
 
 dotenv.config();
 
-mongoose.connect(process.env.DB_URI);
+mongoose.connect(process.env.DB_URL);
 
 // Middleware
 app.use(express.static("public"));

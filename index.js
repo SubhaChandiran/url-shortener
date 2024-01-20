@@ -6,9 +6,7 @@ const dotenv = require("dotenv");
 const { UrlModel } = require("./models/urlshort");
 
 dotenv.config();
-// mongoose.connect(
-//   `mongodb+srv://Subha_Chandiran:SubhasH1058@cluster0.i3ist1y.mongodb.net/myUrlShortener`
-// );
+
 mongoose.connect(process.env.DB_URI);
 
 // Middleware

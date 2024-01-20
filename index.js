@@ -48,6 +48,45 @@ app.post("/create", async function (req, res) {
   }
 });
 
+// Using promises
+app.get("/:urlId", function (req, res) {
+  UrlModel.findOne({ shortUrl: req.params.urlId })
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send("Not found");
+      }
+
+      // Increment click count
+      UrlModel.findByIdAndUpdate(
+        { _id: data.id },
+        { $inc: { clickCount: 1 } },
+        { new: true } // Return the updated document
+      )
+        .then((updatedData) => {
+          // Redirect after click count has been updated
+          res.redirect(data.longUrl);
+        })
+        .catch((updateErr) => {
+          console.error(updateErr);
+          res.status(500).send("Error updating click count");
+        });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    });
+});
+
+app.get("/delete/:id", async function (req, res) {
+  try {
+    const deleteData = await UrlModel.findByIdAndDelete({ _id: req.params.id });
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 app.listen(3000, function () {
   console.log("Post is running in 3000");
 });
